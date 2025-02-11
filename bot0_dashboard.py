@@ -1,4 +1,4 @@
-from config import config
+import os
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,8 +7,10 @@ from textblob import TextBlob
 import praw
 import yfinance as yf
 import requests
+import threading
+import time
 
-# Credenciais
+# Configurações
 config = {
     "binance_api_key": "jbxQyBlNmDpZLuW3fGVs3eLsLQAAbZJJCBTdz5cBFVyBEpg7HhEfxmDfm8cxCK12",
     "binance_api_secret": "qevwzp7iArNsitgjm6DVbRsl3cGswUAeDnPuvi1PgvaXRlZXF2G07KIarJ4HXbh1",
@@ -21,6 +23,13 @@ config = {
 # Conexão com a Testnet da Binance
 client = Client(api_key=config["binance_api_key"], api_secret=config["binance_api_secret"])
 client.API_URL = "https://testnet.binance.vision/api"
+
+# Conexão com o Reddit
+reddit = praw.Reddit(
+    client_id=config["reddit_client_id"],
+    client_secret=config["reddit_client_secret"],
+    user_agent=config["reddit_user_agent"]
+)
 
 # Lista dos 10 pares mais usados
 pares_populares = [
@@ -93,16 +102,27 @@ for simbolo in pares_populares:
     else:
         st.error(f"Erro ao carregar dados para {simbolo}.")
 
-# Conexão com o Reddit
-reddit = praw.Reddit(
-    client_id=config["reddit_client_id"],
-    client_secret=config["reddit_client_secret"],
-    user_agent=config["reddit_user_agent"]
-)
-
 # Sentimento do Reddit
 st.header("Análise de Sentimento no Reddit")
 for termo in ["Bitcoin", "Ethereum", "Cardano", "Binance Coin"]:
     sentimento = analisar_sentimentos_reddit(termo)
     st.write(f"Sentimento sobre {termo}: {'Positivo' if sentimento > 0 else 'Negativo' if sentimento < 0 else 'Neutro'} ({sentimento})")
-    
+
+# Configurar a porta dinâmica
+port = int(os.environ.get("PORT", 8501))
+
+# Função Heartbeat para Manter o Serviço Online
+def heartbeat():
+    while True:
+        try:
+            requests.get(f"http://localhost:{port}")
+        except:
+            pass
+        time.sleep(600)  # Pingar a cada 10 minutos
+
+# Iniciar o Heartbeat em Background
+threading.Thread(target=heartbeat, daemon=True).start()
+
+# Executar o Streamlit
+if __name__ == "__main__":
+    st._is_running_with_streamlit = True
