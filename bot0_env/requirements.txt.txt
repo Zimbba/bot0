@@ -1,0 +1,8 @@
+streamlit
+python-binance
+numpy
+pandas
+matplotlib
+praw
+yfinance
+pyngrok

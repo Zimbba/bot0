@@ -1,0 +1,20 @@
+# Configurações e Credenciais do Bot0
+
+config = {
+    # Credenciais da Binance Testnet
+    "binance_api_key": "jbxQyBlNmDpZLuW3fGVs3eLsLQAAbZJJCBTdz5cBFVyBEpg7HhEfxmDfm8cxCK12",
+    "binance_api_secret": "qevwzp7iArNsitgjm6DVbRsl3cGswUAeDnPuvi1PgvaXRlZXF2G07KIarJ4HXbh1",
+
+    # CoinGecko API (Key opcional, mas incluída para consistência)
+    "coingecko_api_key": "CG-iSGAPZYuWiVkBgKw9R41XnUk",
+
+    # Credenciais do Reddit
+    "reddit_client_id": "vF-byer6LtI0eU1OKk1VLw",
+    "reddit_client_secret": "pea_3JrPKrHxI2AI8Mto4FZQ8fuRpA",
+    "reddit_user_agent": "bot ai for crypto",
+
+    # Credenciais do TradingView
+    # Nota: Estamos a usar yfinance, mas incluí por completude.
+    "tradingview_user": "Zimbba",
+    "tradingview_pass": "!1nfinit0Saf!"
+}
